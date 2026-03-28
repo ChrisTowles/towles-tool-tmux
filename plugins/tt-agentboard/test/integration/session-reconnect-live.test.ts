@@ -165,6 +165,201 @@ describe("Session Reconnect Live (real tmux)", { timeout: 30_000 }, () => {
   });
 });
 
+describe("Session Reconnect After Server Restart (real tmux + mocked DB)", { timeout: 30_000 }, () => {
+  const tmuxAvailable = isTmuxAvailable();
+
+  it("resumes capture for running card with live session on restart", async ({ skip }) => {
+    if (!tmuxAvailable) skip();
+
+    const cardId = 5001;
+    const sessionName = `card-${cardId}`;
+
+    // Create a real tmux session simulating a running agent
+    createTmuxSession(sessionName);
+    expect(tmuxSessionExists(sessionName)).toBe(true);
+
+    // Mock deps with real tmux manager behavior
+    const mockDb = createMockDb();
+    const mockEventBus = createMockEventBus();
+    const mockCardService = createMockCardService();
+
+    // First select: lookup card by ID from tmux session
+    // Second select: find all running cards
+    let selectCount = 0;
+    mockDb.select = vi.fn().mockImplementation(() => {
+      selectCount++;
+      const chain: Record<string, unknown> = {};
+      chain.from = vi.fn().mockReturnValue(chain);
+      if (selectCount === 1) {
+        // Card exists in DB with running status
+        chain.where = vi.fn().mockResolvedValue([{ id: cardId, status: "running" }]);
+      } else {
+        // Only this card is running
+        chain.where = vi.fn().mockResolvedValue([{ id: cardId, status: "running" }]);
+      }
+      return chain;
+    });
+
+    const updateChain: Record<string, unknown> = {};
+    updateChain.set = vi.fn().mockReturnValue(updateChain);
+    updateChain.where = vi.fn().mockResolvedValue(undefined);
+    mockDb.update = vi.fn().mockReturnValue(updateChain);
+
+    // Real tmux manager that uses actual tmux
+    const realTmuxManager = {
+      isAvailable: () => true,
+      listSessions: () => listCardSessions(),
+      sessionExists: (name: string) => tmuxSessionExists(name),
+      startCapture: vi.fn(),
+      killSession: (name: string) => killTmuxSession(name),
+    };
+
+    // Simulate server restart by running session reconnect
+    await createSessionReconnect({
+      db: mockDb as never,
+      tmuxManager: realTmuxManager,
+      eventBus: mockEventBus as never,
+      logger: createMockLogger() as never,
+      cardService: mockCardService as never,
+    });
+
+    // Capture should be resumed for the running card's session
+    expect(realTmuxManager.startCapture).toHaveBeenCalledWith(sessionName, expect.any(Function));
+
+    // Card should NOT be marked failed
+    expect(mockCardService.markFailed).not.toHaveBeenCalled();
+
+    // logEvent should be called for reconnection
+    expect(mockCardService.logEvent).toHaveBeenCalledWith(
+      cardId,
+      "tmux_session_reconnected",
+      expect.stringContaining(sessionName),
+    );
+
+    // Cleanup
+    killTmuxSession(sessionName);
+  });
+
+  it("marks running card as failed when session is missing on restart", async ({ skip }) => {
+    if (!tmuxAvailable) skip();
+
+    const cardId = 5002;
+    // No tmux session created — simulates session that died
+
+    const mockDb = createMockDb();
+    const mockEventBus = createMockEventBus();
+    const mockCardService = createMockCardService();
+
+    // First select: no sessions found matching any card
+    // Second select: find all running cards — returns our card
+    let selectCount = 0;
+    mockDb.select = vi.fn().mockImplementation(() => {
+      selectCount++;
+      const chain: Record<string, unknown> = {};
+      chain.from = vi.fn().mockReturnValue(chain);
+      if (selectCount === 1) {
+        chain.where = vi.fn().mockResolvedValue([]);
+      } else {
+        chain.where = vi.fn().mockResolvedValue([{ id: cardId, status: "running" }]);
+      }
+      return chain;
+    });
+
+    const updateChain: Record<string, unknown> = {};
+    updateChain.set = vi.fn().mockReturnValue(updateChain);
+    updateChain.where = vi.fn().mockResolvedValue(undefined);
+    mockDb.update = vi.fn().mockReturnValue(updateChain);
+
+    const realTmuxManager = {
+      isAvailable: () => true,
+      listSessions: () => listCardSessions(),
+      sessionExists: (name: string) => tmuxSessionExists(name),
+      startCapture: vi.fn(),
+      killSession: (name: string) => killTmuxSession(name),
+    };
+
+    await createSessionReconnect({
+      db: mockDb as never,
+      tmuxManager: realTmuxManager,
+      eventBus: mockEventBus as never,
+      logger: createMockLogger() as never,
+      cardService: mockCardService as never,
+    });
+
+    // Card should be marked failed — no session to reconnect to
+    expect(mockCardService.markFailed).toHaveBeenCalledWith(cardId, expect.any(String));
+
+    // Capture should NOT be started
+    expect(realTmuxManager.startCapture).not.toHaveBeenCalled();
+  });
+
+  it("kills orphaned session when card status is not running", async ({ skip }) => {
+    if (!tmuxAvailable) skip();
+
+    const cardId = 5003;
+    const sessionName = `card-${cardId}`;
+
+    // Create session but card is not in running state
+    createTmuxSession(sessionName);
+    expect(tmuxSessionExists(sessionName)).toBe(true);
+
+    const mockDb = createMockDb();
+    const mockEventBus = createMockEventBus();
+    const mockCardService = createMockCardService();
+
+    let selectCount = 0;
+    mockDb.select = vi.fn().mockImplementation(() => {
+      selectCount++;
+      const chain: Record<string, unknown> = {};
+      chain.from = vi.fn().mockReturnValue(chain);
+      if (selectCount === 1) {
+        // Card exists but is in review_ready status (completed)
+        chain.where = vi.fn().mockResolvedValue([{ id: cardId, status: "review_ready" }]);
+      } else {
+        // No running cards
+        chain.where = vi.fn().mockResolvedValue([]);
+      }
+      return chain;
+    });
+
+    const updateChain: Record<string, unknown> = {};
+    updateChain.set = vi.fn().mockReturnValue(updateChain);
+    updateChain.where = vi.fn().mockResolvedValue(undefined);
+    mockDb.update = vi.fn().mockReturnValue(updateChain);
+
+    let killedSession: string | null = null;
+    const realTmuxManager = {
+      isAvailable: () => true,
+      listSessions: () => listCardSessions(),
+      sessionExists: (name: string) => tmuxSessionExists(name),
+      startCapture: vi.fn(),
+      killSession: (name: string) => {
+        killedSession = name;
+        killTmuxSession(name);
+      },
+    };
+
+    await createSessionReconnect({
+      db: mockDb as never,
+      tmuxManager: realTmuxManager,
+      eventBus: mockEventBus as never,
+      logger: createMockLogger() as never,
+      cardService: mockCardService as never,
+    });
+
+    // Session should be killed since card is not running
+    expect(killedSession).toBe(sessionName);
+    expect(tmuxSessionExists(sessionName)).toBe(false);
+
+    // logEvent should record the orphaned session was killed
+    expect(mockCardService.logEvent).toHaveBeenCalledWith(
+      cardId,
+      "tmux_session_orphaned_killed",
+      expect.stringContaining(sessionName),
+    );
+  });
+});
+
 describe("Session Reconnect Plugin (mocked)", () => {
   let mockDb: ReturnType<typeof createMockDb>;
   let mockEventBus: ReturnType<typeof createMockEventBus>;
