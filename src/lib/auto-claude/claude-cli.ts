@@ -1,4 +1,6 @@
+import { existsSync, readFileSync } from "node:fs";
 import { createInterface } from "node:readline";
+import { join } from "node:path";
 
 import consola from "consola";
 import pc from "picocolors";
@@ -29,6 +31,30 @@ export interface ClaudeLogger {
 const PROCESS_RETRIES = 3;
 const PROCESS_RETRY_DELAY_MS = 5_000;
 
+function logPromptAndSystemPrompt(promptFile: string, log: ClaudeLogger): void {
+  // Log the prompt being sent
+  const resolvedPath = promptFile.startsWith("@") ? promptFile.slice(1) : promptFile;
+  try {
+    const promptContent = readFileSync(resolvedPath, "utf-8");
+    log.info(`${pc.bold("Prompt file:")} ${resolvedPath}`);
+    log.log(pc.dim("─".repeat(60)));
+    log.log(promptContent);
+    log.log(pc.dim("─".repeat(60)));
+  } catch {
+    log.warn(`Could not read prompt file: ${resolvedPath}`);
+  }
+
+  // Log the system prompt (CLAUDE.md) if it exists
+  const claudeMdPath = join(process.cwd(), "CLAUDE.md");
+  if (existsSync(claudeMdPath)) {
+    const claudeMd = readFileSync(claudeMdPath, "utf-8");
+    log.info(`${pc.bold("System prompt (CLAUDE.md):")} ${claudeMdPath}`);
+    log.log(pc.dim("─".repeat(60)));
+    log.log(claudeMd);
+    log.log(pc.dim("─".repeat(60)));
+  }
+}
+
 export async function runClaude(opts: {
   promptFile: string;
   maxTurns?: number;
@@ -52,6 +78,8 @@ export async function runClaude(opts: {
   ];
 
   log.info(`${pc.dim("▶")} Calling Claude${opts.maxTurns ? ` (max ${opts.maxTurns} turns)` : ""}…`);
+
+  logPromptAndSystemPrompt(opts.promptFile, log);
 
   let lastError: Error | undefined;
   for (let attempt = 1; attempt <= PROCESS_RETRIES; attempt++) {
