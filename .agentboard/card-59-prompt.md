@@ -1,0 +1,1 @@
+I want the ready column to automatically start jobs if there's an open slot I do want to be able to mark cards as blocked if for some reason I don't want them not to start and this should be an option to do that in the new card model
