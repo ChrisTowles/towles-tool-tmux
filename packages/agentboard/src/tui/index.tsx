@@ -788,6 +788,11 @@ async function main() {
     exitOnCtrlC: true,
     targetFps: 30,
     useMouse: true,
+    // Undefined defaults to enabled with opentui's default flags — explicit
+    // null opts out. The sidebar shares a tmux client with plain shell panes
+    // that don't speak the kitty protocol's CSI-u key encoding, so leaving
+    // it enabled here leaks garbled escape sequences (e.g. Esc) into them.
+    useKittyKeyboard: null,
   });
 }
 

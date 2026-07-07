@@ -51,8 +51,8 @@
   "dependencies": {
     "@anthropic-ai/claude-code": "^2.1.107",
     "@anthropic-ai/sdk": "^0.88.0",
-    "@opentui/core": "^0.1.99",
-    "@opentui/solid": "^0.1.99",
+    "@opentui/core": "0.1.99",
+    "@opentui/solid": "0.1.99",
     "citty": "^0.2.2",
     "consola": "^3.4.2",
     "d3-hierarchy": "^3.1.2",
