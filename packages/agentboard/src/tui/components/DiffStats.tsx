@@ -3,7 +3,7 @@ import type { Accessor } from "solid-js";
 import type { SessionData, Theme } from "../../runtime/index";
 
 export interface DiffStatsProps {
-  session: SessionData;
+  session: Pick<SessionData, "filesChanged" | "linesAdded" | "linesRemoved" | "commitsDelta">;
   palette: Accessor<Theme["palette"]>;
 }
 

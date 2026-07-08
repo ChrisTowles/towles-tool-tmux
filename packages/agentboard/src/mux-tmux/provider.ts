@@ -86,6 +86,10 @@ export class TmuxProvider implements MuxProviderV1, WindowCapable, SidebarCapabl
     this.tmux.killSession(name);
   }
 
+  sendKeys(name: string, keys: string): void {
+    this.tmux.sendKeys(name, keys);
+  }
+
   setupHooks(serverHost: string, serverPort: number): void {
     const base = `http://${serverHost}:${serverPort}`;
     const hookPost = (path: string, data?: string) => {

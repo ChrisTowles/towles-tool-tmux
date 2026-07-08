@@ -308,6 +308,10 @@ export class TmuxClient {
     this.run(["kill-session", "-t", target]);
   }
 
+  sendKeys(target: string, keys: string): void {
+    this.run(["send-keys", "-t", target, keys, "Enter"]);
+  }
+
   // ─── Windows ───────────────────────────────────────
 
   listWindows(options?: { scope?: "all" } | { scope: "session"; target: string }): WindowInfo[] {

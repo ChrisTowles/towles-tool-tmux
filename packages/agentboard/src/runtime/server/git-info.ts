@@ -2,7 +2,6 @@ import { existsSync, watch } from "node:fs";
 import type { FSWatcher } from "node:fs";
 import { join } from "node:path";
 import consola from "consola";
-import type { SessionData } from "../shared";
 import { startSessionPoll } from "./poll";
 
 // --- Shell helpers (for git commands only) ---
@@ -262,9 +261,9 @@ function onGitHeadChange(broadcastFn: () => void): void {
   }, 200);
 }
 
-export function syncGitWatchers(sessions: SessionData[], broadcastFn: () => void): void {
+export function syncGitWatchers(dirs: { dir: string }[], broadcastFn: () => void): void {
   const currentDirs = new Set<string>();
-  for (const s of sessions) {
+  for (const s of dirs) {
     if (s.dir) currentDirs.add(s.dir);
   }
 

@@ -44,6 +44,8 @@ export const AgentboardSettingsSchema = z.object({
   sidebarPosition: z.enum(["left", "right"]).optional(),
   keybinding: z.string().optional(),
   detailPanelHeights: z.record(z.string(), z.number()).optional(),
+  /** Absolute paths to repos the sidebar should always show, even with no active session */
+  repoSlots: z.array(z.string()).optional(),
 });
 
 export type AgentboardSettings = z.infer<typeof AgentboardSettingsSchema>;

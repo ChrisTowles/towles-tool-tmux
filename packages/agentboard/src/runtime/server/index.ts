@@ -1,5 +1,5 @@
-import { readFileSync, unlinkSync, writeFileSync, appendFileSync } from "node:fs";
-import { join } from "node:path";
+import { readFileSync, unlinkSync, writeFileSync, appendFileSync, realpathSync } from "node:fs";
+import { join, basename } from "node:path";
 import { homedir } from "node:os";
 
 import consola from "consola";
@@ -30,6 +30,7 @@ import {
 import type {
   ServerState,
   SessionData,
+  SlotInfo,
   ClientCommand,
   SessionViewed,
   MetadataTone,
@@ -381,9 +382,41 @@ export function startServer(
 
     metadataStore.pruneSessions(new Set(sessions.map((s) => s.name)));
 
+    const liveDirs = new Set(
+      sessions.map((s) => {
+        try {
+          return realpathSync(s.dir);
+        } catch {
+          return s.dir;
+        }
+      }),
+    );
+    const slots: SlotInfo[] = [];
+    for (const dir of config.repoSlots ?? []) {
+      let resolved = dir;
+      try {
+        resolved = realpathSync(dir);
+      } catch {
+        continue; // configured slot no longer exists on disk
+      }
+      if (liveDirs.has(resolved)) continue;
+      const git = getGitInfo(resolved);
+      slots.push({
+        dir: resolved,
+        name: basename(resolved),
+        branch: git.branch,
+        isWorktree: git.isWorktree,
+        filesChanged: git.filesChanged,
+        linesAdded: git.linesAdded,
+        linesRemoved: git.linesRemoved,
+        commitsDelta: git.commitsDelta,
+      });
+    }
+
     return {
       type: "state",
       sessions,
+      slots,
       theme: currentTheme,
       sidebarWidth,
       preferredEditor,
@@ -409,7 +442,7 @@ export function startServer(
     tracker.pruneIdle(IDLE_PRUNE_MS);
     tracker.pruneSupersededByPane();
     lastState = computeState();
-    syncGitWatchers(lastState.sessions, broadcastState);
+    syncGitWatchers([...lastState.sessions, ...lastState.slots], broadcastState);
     const msg = JSON.stringify(lastState);
     server.publish("sidebar", msg);
   }
@@ -1420,7 +1453,8 @@ export function startServer(
         break;
       }
       case "new-session":
-        mux.createSession();
+        mux.createSession(cmd.name, cmd.dir);
+        if (cmd.launch === "claude" && cmd.name) mux.sendKeys(cmd.name, "claude");
         broadcastState();
         break;
       case "kill-session": {
@@ -1799,7 +1833,7 @@ export function startServer(
     broadcastState,
   });
   gitPollTimer = startGitPoll({
-    getSessions: () => lastState?.sessions ?? null,
+    getSessions: () => (lastState ? [...lastState.sessions, ...lastState.slots] : null),
     getClientCount: () => clientCount,
     broadcastState,
   });

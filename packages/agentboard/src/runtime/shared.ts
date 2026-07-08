@@ -39,9 +39,22 @@ export interface SessionData {
   metadata?: SessionMetadata | null;
 }
 
+/** A configured repo slot with no live tmux session — git info only, no session state. */
+export interface SlotInfo {
+  dir: string;
+  name: string;
+  branch: string;
+  isWorktree: boolean;
+  filesChanged: number;
+  linesAdded: number;
+  linesRemoved: number;
+  commitsDelta: number;
+}
+
 export interface ServerState {
   type: "state";
   sessions: SessionData[];
+  slots: SlotInfo[];
   theme: string | undefined;
   sidebarWidth: number;
   preferredEditor: string;
@@ -114,7 +127,7 @@ export interface SessionMetadata {
 export type ClientCommand =
   | { type: "switch-session"; name: string }
   | { type: "switch-index"; index: number }
-  | { type: "new-session" }
+  | { type: "new-session"; dir?: string; name?: string; launch?: "claude" }
   | { type: "kill-session"; name: string }
   | { type: "reorder-session"; name: string; delta: ReorderDelta }
   | { type: "refresh" }

@@ -57,6 +57,7 @@ export {
 } from "./shared";
 export type {
   SessionData,
+  SlotInfo,
   ServerState,
   SessionViewed,
   ResizeNotify,

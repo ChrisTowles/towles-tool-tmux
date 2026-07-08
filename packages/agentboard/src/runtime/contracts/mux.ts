@@ -69,6 +69,7 @@ export interface MuxProviderV1 {
   getPaneCount(name: string): number;
   createSession(name?: string, dir?: string): void;
   killSession(name: string): void;
+  sendKeys(name: string, keys: string): void;
 
   // Hooks
   setupHooks(serverHost: string, serverPort: number): void;

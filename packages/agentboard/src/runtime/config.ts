@@ -16,6 +16,10 @@ export interface AgentboardConfig {
   sidebarPosition?: "left" | "right";
   /** Tmux prefix key for sidebar toggle (default "s") */
   keybinding?: string;
+  /** Per-panel heights in the detail view */
+  detailPanelHeights?: Record<string, number>;
+  /** Absolute paths to repos the sidebar should always show, even with no active session */
+  repoSlots?: string[];
 }
 
 const DEFAULTS: AgentboardConfig = {};

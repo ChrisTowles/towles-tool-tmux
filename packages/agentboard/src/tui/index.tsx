@@ -18,11 +18,13 @@ import { ensureServer, SERVER_PORT, SERVER_HOST, resolveTheme } from "../runtime
 import type {
   ServerMessage,
   SessionData,
+  SlotInfo,
   ClientCommand,
   ReorderDelta,
   Theme,
 } from "../runtime/index";
 import { SessionCard } from "./components/SessionCard";
+import { SlotCard } from "./components/SlotCard";
 import { StatusBar } from "./components/StatusBar";
 import { detectMuxContext, refocusMainPane, getLocalSessionName } from "./mux-context";
 import { SPINNERS, BOLD, DIM, DIVIDER, logResizeDebug } from "./constants";
@@ -76,6 +78,7 @@ function App() {
   const S = () => theme().status;
 
   const [sessions, setSessions] = createStore<SessionData[]>([]);
+  const [slots, setSlots] = createStore<SlotInfo[]>([]);
   const [focusedSession, setFocusedSession] = createSignal<string | null>(null);
   const [connected, setConnected] = createSignal(false);
   const [spinIdx, setSpinIdx] = createSignal(0);
@@ -115,6 +118,17 @@ function App() {
 
   const focusedData = createMemo(() => sessions.find((s) => s.name === focusedSession()) ?? null);
 
+  // Slot rows (configured repos with no live session) share the up/down
+  // browsing focus with session rows, keyed by a "slot:<dir>" prefix so they
+  // never collide with a real session name.
+  function slotKey(dir: string): string {
+    return `slot:${dir}`;
+  }
+  const combinedRows = createMemo(() => [
+    ...sessions.map((s) => ({ key: s.name })),
+    ...slots.map((sl) => ({ key: slotKey(sl.dir) })),
+  ]);
+
   function send(cmd: ClientCommand, successMsg?: string): boolean {
     if (connected() && ws) {
       ws.send(JSON.stringify(cmd));
@@ -136,6 +150,13 @@ function App() {
     send({ type: "switch-session", name });
   }
 
+  function startSlot(slot: SlotInfo, launch?: "claude") {
+    send(
+      { type: "new-session", dir: slot.dir, name: slot.name, launch },
+      launch === "claude" ? `starting claude in ${slot.name}` : `starting shell in ${slot.name}`,
+    );
+  }
+
   function reIdentify() {
     const sessionName = getLocalSessionName(muxCtx);
     if (!sessionName) return;
@@ -146,16 +167,16 @@ function App() {
   }
 
   function moveLocalFocus(delta: -1 | 1) {
-    const list = sessions;
+    const list = combinedRows();
     if (list.length === 0) return;
 
     const current = focusedSession();
     const currentIdx = Math.max(
       0,
-      list.findIndex((s) => s.name === current),
+      list.findIndex((r) => r.key === current),
     );
     const nextIdx = Math.max(0, Math.min(list.length - 1, currentIdx + delta));
-    const next = list[nextIdx]?.name ?? null;
+    const next = list[nextIdx]?.key ?? null;
 
     if (!next || next === current) return;
 
@@ -319,14 +340,19 @@ function App() {
         batch(() => {
           if (msg.type === "state") {
             setSessions(reconcile(msg.sessions, { key: "name" }));
+            setSlots(reconcile(msg.slots, { key: "dir" }));
             // Selection is local — initialize to this sidebar's own session,
-            // and repair it if the selected session disappeared.
+            // and repair it if the selected session/slot disappeared.
             const selected = focusedSession();
-            if (!selected || !msg.sessions.some((s) => s.name === selected)) {
+            const validKeys = new Set([
+              ...msg.sessions.map((s) => s.name),
+              ...msg.slots.map((sl) => slotKey(sl.dir)),
+            ]);
+            if (!selected || !validKeys.has(selected)) {
               setFocusedSession(
                 msg.sessions.find((s) => s.name === startupSessionName)?.name ??
                   msg.sessions[0]?.name ??
-                  null,
+                  (msg.slots[0] ? slotKey(msg.slots[0].dir) : null),
               );
             }
             // Drop the optimistic switch marker if its target no longer exists.
@@ -492,7 +518,10 @@ function App() {
           activateFocusedAgent();
         } else {
           const focused = focusedSession();
-          if (focused) switchToSession(focused);
+          if (!focused) break;
+          const slot = slots.find((sl) => slotKey(sl.dir) === focused);
+          if (slot) startSlot(slot, "claude");
+          else switchToSession(focused);
         }
         break;
       }
@@ -529,6 +558,14 @@ function App() {
       case "n":
         createNewSession();
         break;
+      case "s": {
+        if (panelFocus() !== "agents") {
+          const focused = focusedSession();
+          const slot = focused ? slots.find((sl) => slotKey(sl.dir) === focused) : undefined;
+          if (slot) startSlot(slot);
+        }
+        break;
+      }
       default: {
         if (key.number) {
           const idx = Number.parseInt(key.name, 10) - 1;
@@ -616,6 +653,23 @@ function App() {
                     threadName: agent.threadName,
                   });
                 }}
+              />
+            </box>
+          )}
+        </For>
+        <For each={slots}>
+          {(slot, i) => (
+            <box flexDirection="column" flexShrink={0}>
+              <Show when={sessions.length > 0 || i() > 0}>
+                <box height={1}>
+                  <text style={{ fg: P().surface2 }}>{DIVIDER}</text>
+                </box>
+              </Show>
+              <SlotCard
+                slot={slot}
+                isFocused={isFocused(slotKey(slot.dir))}
+                theme={theme}
+                onSelect={() => setFocusedSession(slotKey(slot.dir))}
               />
             </box>
           )}
@@ -713,7 +767,8 @@ function App() {
 
 const HELP_KEYS: [string, string][] = [
   ["j/k ↑↓", "Move focus"],
-  ["Enter", "Switch to session"],
+  ["Enter", "Switch session / start claude on slot"],
+  ["s", "Start shell on focused slot"],
   ["1-9", "Jump to session"],
   ["Tab", "Cycle sessions"],
   ["n", "New session"],
