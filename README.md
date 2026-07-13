@@ -1,5 +1,7 @@
 # Towles Tool
 
+> **Deprecated:** I've switched to [towles-tool-rs](https://github.com/ChrisTowles/towles-tool-rs) as my daily driver. This repo is no longer actively maintained.
+
 Personal CLI toolkit with developer utilities.
 
 ## Installation
