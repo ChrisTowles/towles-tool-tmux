@@ -45,7 +45,7 @@ export async function ensureServer(): Promise<void> {
     }
   }
 
-  const proc = Bun.spawn(["tt", "agentboard", "server"], {
+  const proc = Bun.spawn(["ttt", "agentboard", "server"], {
     stdio: ["ignore", "ignore", Bun.file(SERVER_ERR_LOG)],
   });
   proc.unref();

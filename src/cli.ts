@@ -2,7 +2,11 @@ import { defineCommand } from "citty";
 import { version } from "../package.json";
 
 export const main = defineCommand({
-  meta: { name: "tt", version, description: "towles-tool — personal CLI utilities" },
+  meta: {
+    name: "ttt",
+    version,
+    description: "towles-tool — personal CLI utilities (tmux edition, kept for reference)",
+  },
   subCommands: {
     config: () => import("./commands/config/index.js").then((m) => m.default),
     doctor: () => import("./commands/doctor.js").then((m) => m.default),

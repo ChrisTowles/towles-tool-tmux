@@ -235,7 +235,7 @@ export class TmuxProvider implements MuxProviderV1, WindowCapable, SidebarCapabl
       before: position === "left",
       fullWindow: true,
       size: width,
-      command: `REFOCUS_WINDOW=${windowId} exec tt agentboard tui`,
+      command: `REFOCUS_WINDOW=${windowId} exec ttt agentboard tui`,
     });
 
     if (!newPane) {

@@ -17,7 +17,7 @@
   },
   "bin": {
     "towles-tool": "./bin/run.ts",
-    "tt": "./bin/run.ts"
+    "ttt": "./bin/run.ts"
   },
   "workspaces": [
     "packages/*"

@@ -1,5 +1,7 @@
 # towles-tool
 
+> Archived — superseded by [towles-tool-rs](https://github.com/ChrisTowles/towles-tool-rs). Binary here is `ttt` (not `tt`) to avoid colliding with the Rust CLI. AgentBoard in this repo is kept as a tmux-based reference example; the recommended, actively developed AgentBoard is `crates/tt-agentboard` in towles-tool-rs.
+
 ## Worktree slots — you are probably working in one
 
 This repo is checked out as **primary + slots**: `~/code/p/towles-tool-cli-repos/`
@@ -42,8 +44,8 @@ Rules when working in a slot:
 - `bun run lint` — oxlint
 - `bun run format` — oxfmt
 - `bun typecheck` — tsgo
-- `bun run link` — register global `tt` symlink via `bun link`
-- `bun run link:show` — show which slot the global `tt` points to
+- `bun run link` — register global `ttt` symlink via `bun link`
+- `bun run link:show` — show which slot the global `ttt` points to
 - Pre-commit hook runs: format + lint:fix + typecheck
 
 ## Claude workflow
@@ -65,7 +67,7 @@ Rules when working in a slot:
 - Agent slots: worktree slots in `~/code/p/towles-tool-cli-repos/slots/<name>` (see "Worktree slots" above)
 - Multi-client invariant: "current"/"focused" session is per-client or per-TUI, never a server global. Resolve attached clients at action time (`fromSession` → `tmux list-clients`); stored ttys go stale.
 - Sidebar handoff: each session has its own sidebar TUI process. A session switch moves the viewer to a _different_ TUI — click feedback must relay via the `session-viewed` event's `select` payload, not local state in the originating TUI.
-- Live debugging: server WS on `127.0.0.1:4201`; `TT_AGENTBOARD_DEBUG=1` logs to `/tmp/agentboard-debug.log`; `tt agentboard restart` picks up source changes (runs from source via bun link).
+- Live debugging: server WS on `127.0.0.1:4201`; `TT_AGENTBOARD_DEBUG=1` logs to `/tmp/agentboard-debug.log`; `ttt agentboard restart` picks up source changes (runs from source via bun link).
 - tmux format gotcha: in scripts, `display-message -p "#{session_name}"` is pane-context (where the script runs); use `list-clients -F "#{client_session}"` to verify what a client is actually viewing.
 
 ## Testing Conventions

@@ -115,7 +115,7 @@ export function startServer(
   let sidebarWidth = config.sidebarWidth ?? 35;
   let sidebarPosition: "left" | "right" = config.sidebarPosition ?? "left";
   let preferredEditor = loadPreferredEditor();
-  // Visible by default so a fresh server (including `tt agentboard restart`)
+  // Visible by default so a fresh server (including `ttt agentboard restart`)
   // spawns sidebars on the first ensure-sidebar without needing a toggle.
   let sidebarVisible = true;
 
@@ -1585,7 +1585,7 @@ export function startServer(
 
       if (req.method === "POST" && url.pathname === "/shutdown") {
         log("http", "POST /shutdown");
-        // Defer exit so this response flushes first; lets `tt agentboard
+        // Defer exit so this response flushes first; lets `ttt agentboard
         // restart` terminate a server whose PID file was lost/rotated.
         setTimeout(() => {
           cleanup();

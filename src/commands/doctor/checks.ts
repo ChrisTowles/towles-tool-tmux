@@ -79,7 +79,7 @@ export function checkAgentBoard(): AgentBoardCheck[] {
     name: "database",
     value: dbExists ? dbPath : "not found",
     ok: dbExists,
-    hint: dbExists ? undefined : "Run: tt ag (starts server and creates DB automatically)",
+    hint: dbExists ? undefined : "Run: ttt ag (starts server and creates DB automatically)",
   });
 
   let repoPaths: string[] = [];
@@ -99,7 +99,7 @@ export function checkAgentBoard(): AgentBoardCheck[] {
     warning: repoPaths.length === 0 ? "no scan paths" : undefined,
     hint:
       repoPaths.length === 0
-        ? "Run: tt ag → open Workspaces → run the onboarding wizard"
+        ? "Run: ttt ag → open Workspaces → run the onboarding wizard"
         : undefined,
   });
 

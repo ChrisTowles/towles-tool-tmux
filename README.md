@@ -1,6 +1,6 @@
 # Towles Tool
 
-> **Deprecated:** I've switched to [towles-tool-rs](https://github.com/ChrisTowles/towles-tool-rs) as my daily driver. This repo is no longer actively maintained.
+> **Deprecated:** I've switched to [towles-tool-rs](https://github.com/ChrisTowles/towles-tool-rs) as my daily driver. This repo is no longer actively maintained, and its binary is now `ttt` (not `tt`) so it doesn't collide with the Rust CLI. AgentBoard in particular is kept here only as a tmux-based reference example — see [towles-tool-rs's `tt-agentboard`](https://github.com/ChrisTowles/towles-tool-rs/tree/main/crates/tt-agentboard) for the actively developed, recommended version.
 
 Personal CLI toolkit with developer utilities.
 
@@ -33,35 +33,35 @@ bun link
 
 ### Observability
 
-| Command                   | Description              |
-| ------------------------- | ------------------------ |
-| `tt graph`                | Token Usage (auto-opens) |
-| `tt graph --session <id>` | Single session           |
-| `tt graph --days 14`      | Filter to last N days    |
+| Command                    | Description              |
+| -------------------------- | ------------------------ |
+| `ttt graph`                | Token Usage (auto-opens) |
+| `ttt graph --session <id>` | Single session           |
+| `ttt graph --days 14`      | Filter to last N days    |
 
 ### Git
 
-| Command              | Description                     |
-| -------------------- | ------------------------------- |
-| `tt gh branch`       | Create branch from GitHub issue |
-| `tt gh pr`           | Create pull request             |
-| `tt gh branch-clean` | Delete merged branches          |
+| Command               | Description                     |
+| --------------------- | ------------------------------- |
+| `ttt gh branch`       | Create branch from GitHub issue |
+| `ttt gh pr`           | Create pull request             |
+| `ttt gh branch-clean` | Delete merged branches          |
 
 ### Journaling
 
-| Command                  | Alias      | Description   |
-| ------------------------ | ---------- | ------------- |
-| `tt journal daily-notes` | `tt today` | Weekly/daily  |
-| `tt journal meeting`     | `tt m`     | Meeting notes |
-| `tt journal note`        | `tt n`     | General notes |
+| Command                   | Alias       | Description   |
+| ------------------------- | ----------- | ------------- |
+| `ttt journal daily-notes` | `ttt today` | Weekly/daily  |
+| `ttt journal meeting`     | `ttt m`     | Meeting notes |
+| `ttt journal note`        | `ttt n`     | General notes |
 
 ### Utilities
 
-| Command      | Description                    |
-| ------------ | ------------------------------ |
-| `tt config`  | Show configuration             |
-| `tt doctor`  | Check dependencies             |
-| `tt install` | Configure Claude Code settings |
+| Command       | Description                    |
+| ------------- | ------------------------------ |
+| `ttt config`  | Show configuration             |
+| `ttt doctor`  | Check dependencies             |
+| `ttt install` | Configure Claude Code settings |
 
 ## Claude Code Skills
 

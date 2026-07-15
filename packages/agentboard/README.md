@@ -2,6 +2,8 @@
 
 Tmux sidebar TUI for monitoring sessions and AI agents. Based on [opensessions](https://github.com/nicholasgasior/opensessions).
 
+> **Kept for reference.** This TS/tmux implementation is no longer actively developed. The recommended, actively developed AgentBoard is [`crates/tt-agentboard`](https://github.com/ChrisTowles/towles-tool-rs/tree/main/crates/tt-agentboard) in [towles-tool-rs](https://github.com/ChrisTowles/towles-tool-rs) — use that one day to day. This version stays runnable as a worked example, under the `ttt` binary (not `tt`).
+
 ## Why
 
 AgentBoard v1 was a Nuxt web UI with embedded terminal rendering in the browser, built around a Kanban board workflow — create tickets, watch them move across columns as agents work. In practice, most tasks only need one or two touches before they're done, so constantly tracking which state a card is in added friction instead of removing it. The real unit of work is just a tmux session — when it's ready, merge it.
@@ -12,7 +14,7 @@ On top of that, fighting the gap between a web page and the real terminal meant 
 
 ```bash
 # Install into tmux (one-time)
-tt agentboard setup
+ttt agentboard setup
 
 # Reload tmux, then toggle the sidebar:
 # prefix a t
@@ -66,7 +68,7 @@ plugins/tt-agentboard/
     runtime/       Shared types, themes, agent watchers
     mux-tmux/      Tmux provider (session/pane management)
   scripts/         Tmux keybinding scripts
-  (tmux init via `tt agentboard init`)
+  (tmux init via `ttt agentboard init`)
 ```
 
 ### Server
@@ -131,12 +133,12 @@ Config file: `~/.config/towles-tool/agentboard/config.json`
 ## CLI Commands
 
 ```bash
-tt agentboard setup      # Install tmux plugin
-tt agentboard uninstall  # Remove from tmux
-tt agentboard server     # Start server manually
-tt agentboard tui        # Start TUI manually
-tt agentboard keys       # Show keybindings
-tt agentboard restart    # Kill stash sessions, ensure server, toggle sidebar on
+ttt agentboard setup      # Install tmux plugin
+ttt agentboard uninstall  # Remove from tmux
+ttt agentboard server     # Start server manually
+ttt agentboard tui        # Start TUI manually
+ttt agentboard keys       # Show keybindings
+ttt agentboard restart    # Kill stash sessions, ensure server, toggle sidebar on
 ```
 
 ## Agent Watchers

@@ -20,8 +20,18 @@ const SERVER_PORT = Number(process.env.TT_AGENTBOARD_PORT) || 4201;
 // Keybinding defaults
 const DEFAULT_KEY = "a";
 const TMUX_BINDINGS = { toggle: "t", focus: "s" } as const;
-const RUN_SHELL_LINE = "run-shell 'tt agentboard init'";
+const RUN_SHELL_LINE = "run-shell 'ttt agentboard init'";
 const MARKER = "# agentboard";
+
+function printNewAgentboardNote(): void {
+  consola.info(
+    colors.dim(
+      "This is the legacy tmux AgentBoard, kept as a reference example. " +
+        "The recommended, actively developed AgentBoard is `tt-agentboard` in " +
+        "towles-tool-rs: https://github.com/ChrisTowles/towles-tool-rs",
+    ),
+  );
+}
 
 function findTmuxConf(): string | null {
   const candidates = [resolve(process.env.HOME ?? "~", ".config/tmux/tmux.conf")];
@@ -116,6 +126,7 @@ function setup(): void {
   if (content.includes(MARKER)) {
     consola.success("Already installed in tmux.conf");
     reloadTmux();
+    printNewAgentboardNote();
     return;
   }
 
@@ -137,6 +148,7 @@ function setup(): void {
 
   reloadTmux();
   showKeys();
+  printNewAgentboardNote();
 }
 
 function uninstall(): void {
@@ -244,7 +256,7 @@ function describeServerStartFailure(spawnError: Error | null, exit: ServerExit |
   if (spawnError) {
     parts.push(
       (spawnError as NodeJS.ErrnoException).code === "ENOENT"
-        ? "could not launch `tt` (not found on PATH for the spawned process)"
+        ? "could not launch `ttt` (not found on PATH for the spawned process)"
         : `failed to spawn server: ${spawnError.message}`,
     );
   }
@@ -266,12 +278,12 @@ async function ensureServerUp(): Promise<boolean> {
   consola.info("Starting agentboard server...");
 
   // Capture the spawned server's output and exit so a crash (port already in
-  // use, missing `tt` on PATH, etc.) surfaces a reason instead of a bare exit 1.
+  // use, missing `ttt` on PATH, etc.) surfaces a reason instead of a bare exit 1.
   const errFd = openSync(SERVER_ERR_LOG, "w");
   let spawnError: Error | null = null;
   let exit: ServerExit | null = null;
 
-  const child = spawn("tt", ["agentboard", "server"], {
+  const child = spawn("ttt", ["agentboard", "server"], {
     stdio: ["ignore", errFd, errFd],
     detached: true,
   });
@@ -361,7 +373,7 @@ function init(): void {
     "agentboard",
     TMUX_BINDINGS.toggle,
     "run-shell",
-    "tt agentboard run --toggle",
+    "ttt agentboard run --toggle",
   );
   tmux(
     "bind-key",
@@ -369,7 +381,7 @@ function init(): void {
     "agentboard",
     TMUX_BINDINGS.focus,
     "run-shell",
-    "tt agentboard run --focus",
+    "ttt agentboard run --focus",
   );
 
   // Number keys 1-9 switch to session by index
@@ -516,6 +528,7 @@ async function restart(): Promise<void> {
 
 function startTui(): void {
   ensureBun();
+  printNewAgentboardNote();
 
   const agentboardDir = resolve(import.meta.dirname, "../../packages/agentboard");
   const tuiEntry = resolve(agentboardDir, "src/tui/index.tsx");
@@ -565,7 +578,7 @@ export default defineCommand({
       case "run":
         if (args.toggle) await runToggle();
         else if (args.focus) await runFocus();
-        else consola.error("Usage: tt agentboard run --toggle | --focus");
+        else consola.error("Usage: ttt agentboard run --toggle | --focus");
         break;
       case "keys":
         showKeys();
