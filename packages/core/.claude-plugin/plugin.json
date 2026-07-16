@@ -1,7 +1,7 @@
 {
   "name": "tt",
   "description": "Core dev workflow skills: interview-me, write-prd, prd-to-issues, tdd, improve-architecture, refine-text, task, diagnose, triage, prototype, handoff, parallel-slots, yagni, yagni-review, towles-tool. Hooks track yagni mode across sessions (adapted from DietrichGebert/ponytail, MIT).",
-  "version": "0.0.157",
+  "version": "0.0.158",
   "author": {
     "name": "Chris Towles"
   }
