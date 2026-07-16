@@ -1,36 +1,36 @@
 ---
 name: towles-tool
-description: Use towles-tool (`tt`) CLI for git helpers, journaling, and developer utilities. Use when asked about "tt commands", "create branch from issue", "daily notes", "meeting notes", or "check dependencies".
+description: Use towles-tool (`ttt`) CLI for git helpers, journaling, and developer utilities. Use when asked about "ttt commands", "create branch from issue", "daily notes", "meeting notes", or "check dependencies".
 user_invocable: true
 ---
 
 # towles-tool CLI
 
-Personal CLI toolkit. Alias: `tt`
+Personal CLI toolkit. Alias: `ttt`
 
 Config: `~/.config/towles-tool/towles-tool.settings.json`
 
 ## Git
 
 ```bash
-tt gh branch        # Create branch from GitHub issue
-tt gh pr            # Create pull request
-tt gh branch-clean  # Delete merged branches
+ttt gh branch        # Create branch from GitHub issue
+ttt gh pr            # Create pull request
+ttt gh branch-clean  # Delete merged branches
 ```
 
 ## Journaling
 
 ```bash
-tt journal daily-notes  # Weekly file, daily sections (alias: tt today)
-tt journal meeting      # Meeting notes (alias: tt m)
-tt journal note         # General notes (alias: tt n)
+ttt journal daily-notes  # Weekly file, daily sections (alias: ttt today)
+ttt journal meeting      # Meeting notes (alias: ttt m)
+ttt journal note         # General notes (alias: ttt n)
 ```
 
 ## Utilities
 
 ```bash
-tt config   # Show config (alias: cfg)
-tt doctor   # Check dependencies
-tt graph    # Visualize dependency graph
-tt install  # Configure Claude Code settings
+ttt config   # Show config (alias: cfg)
+ttt doctor   # Check dependencies
+ttt graph    # Visualize dependency graph
+ttt install  # Configure Claude Code settings
 ```

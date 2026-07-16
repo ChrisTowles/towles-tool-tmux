@@ -184,6 +184,7 @@ function uninstall(): void {
 
 function startServer(): void {
   ensureBun();
+  printNewAgentboardNote();
 
   const agentboardDir = resolve(import.meta.dirname, "../../packages/agentboard");
   const serverEntry = resolve(agentboardDir, "src/server/main.ts");
@@ -463,6 +464,7 @@ async function runFocus(): Promise<void> {
 
 async function restart(): Promise<void> {
   ensureBun();
+  printNewAgentboardNote();
 
   // 1. Kill stash sessions left over from hidden sidebars
   try {

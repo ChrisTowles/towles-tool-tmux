@@ -27,7 +27,7 @@ Then read the resulting file with the `Read` tool to view it visually.
 ## When to use
 
 - After modifying TUI components (agentboard sidebar, StatusBar, DetailPanel)
-- After restarting the agentboard (`tt agentboard restart`)
+- After restarting the agentboard (`ttt agentboard restart`)
 - When debugging visual rendering issues
 - When the user asks you to verify something on screen
 - For self-validation after UI changes before committing

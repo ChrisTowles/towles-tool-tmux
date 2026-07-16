@@ -59,7 +59,7 @@ Dev workflow commands (invoked as `/tt:<command>`):
 - `improve-architecture` - Codebase architecture analysis for agent-friendliness
 - `refine-text` - Improve copy for readability and grammar
 
-Skill: `towles-tool` - Reference for `tt` CLI (git, journal, utils)
+Skill: `towles-tool` - Reference for `ttt` CLI (git, journal, utils)
 
 Plugins are located in `plugins/` with `.claude-plugin/plugin.json` manifests.
 
