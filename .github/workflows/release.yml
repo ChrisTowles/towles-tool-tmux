@@ -72,9 +72,6 @@ jobs:
       - name: Bump version
         run: bunx bumpp ${{ inputs.bump_type || 'patch' }} --yes --no-commit --no-tag --no-push
 
-      - name: Sync plugin versions
-        run: bun run version:sync
-
       - name: Get version
         id: version
         run: echo "version=$(cat package.json | jq -r .version)" >> $GITHUB_OUTPUT

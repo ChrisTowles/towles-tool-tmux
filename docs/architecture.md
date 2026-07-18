@@ -30,39 +30,6 @@
 - `src/utils/date-utils.ts` - Date formatting using Luxon
 - `src/lib/journal/` - Journal template and file generation utilities
 
-## Claude Code Plugin Architecture
-
-**Plugin Marketplace**: `.claude-plugin/marketplace.json`
-
-```bash
-claude plugin marketplace add ChrisTowles/towles-tool-tmux
-claude plugin install tt@towles-tool
-claude plugin update tt@towles-tool
-```
-
-**Reinstall from local path** (for development):
-
-```bash
-claude plugin uninstall tt@towles-tool && claude plugin marketplace remove towles-tool && claude plugin marketplace add /home/ctowles/code/p/towles-tool-tmux && claude plugin install tt@towles-tool
-```
-
-**Available Plugins**:
-
-### `tt-core` (named `tt`)
-
-Dev workflow commands (invoked as `/tt:<command>`):
-
-- `interview-me` - Relentless interviewing to clarify ideas before implementation
-- `write-prd` - Transform conversations into structured PRDs with user stories
-- `prd-to-issues` - Break PRDs into vertical-slice GitHub issues
-- `tdd` - Strict red-green-refactor test-driven development
-- `improve-architecture` - Codebase architecture analysis for agent-friendliness
-- `refine-text` - Improve copy for readability and grammar
-
-Skill: `towles-tool` - Reference for `ttt` CLI (git, journal, utils)
-
-Plugins are located in `plugins/` with `.claude-plugin/plugin.json` manifests.
-
 ## Error Handling Convention
 
 - **Internal calls**: Use `git()` / throwing `exec()` — failures are exceptional and should abort.

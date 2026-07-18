@@ -54,7 +54,6 @@ Rules when working in a slot:
 
 - `/verify` — run format-check + lint + typecheck + test in one shot. Use before commits and PRs.
 - `verify-app` subagent — same plus CLI entrypoint and AgentBoard workspace resolution. Dispatch when verifying after risky changes.
-- `tt:parallel-slots` skill (shipped via the `tt` plugin) — when to fan out across `~/code/p/towles-tool-cli-repos/slots/*`.
 
 ## Architecture
 

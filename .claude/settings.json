@@ -1,7 +1,4 @@
 {
-  "enabledPlugins": {
-    "tt@towles-tool": true
-  },
   "permissions": {
     "allow": [
       "Bash(bun test:*)",

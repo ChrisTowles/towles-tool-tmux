@@ -8,14 +8,6 @@ Personal CLI toolkit with developer utilities.
 
 ## Installation
 
-### Claude Code Plugin
-
-```bash
-claude plugin marketplace add ChrisTowles/towles-tool-tmux
-claude plugin install tt@towles-tool
-claude plugin update tt@towles-tool
-```
-
 ### Global Install
 
 ```bash
@@ -65,18 +57,9 @@ bun link
 | `ttt doctor`  | Check dependencies             |
 | `ttt install` | Configure Claude Code settings |
 
-## Claude Code Skills
-
-| Skill                    | Description                   |
-| ------------------------ | ----------------------------- |
-| `/tt:plan`               | Create implementation plan    |
-| `/tt:improve`            | Suggest codebase improvements |
-| `/tt:refactor-claude-md` | Fix grammar/spelling          |
-| `/tt:refine`             | Fix grammar/spelling          |
-
 ## Guidelines
 
-- [Architecture](docs/architecture.md) - CLI structure, plugin system, tech stack
+- [Architecture](docs/architecture.md) - CLI structure, tech stack
 - [CICD via GitHub Actions](docs/github-actions.md) - Automated release workflow
 - [Testing](docs/testings.md) - Info about Tests
 

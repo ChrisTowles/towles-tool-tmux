@@ -68,12 +68,6 @@ async function ensureClaudePlugins(): Promise<void> {
 
   const requiredPlugins = [
     {
-      id: "tt@towles-tool",
-      name: "core",
-      marketplaceUrl: "https://github.com/ChrisTowles/towles-tool-tmux",
-      marketplace: "towles-tool",
-    },
-    {
       id: "code-simplifier@claude-plugins-official",
       name: "code-simplifier",
     },
@@ -86,17 +80,6 @@ async function ensureClaudePlugins(): Promise<void> {
     installedIds = new Set(plugins.map((p) => p.id));
   } catch {
     consola.log(colors.yellow("⚠ Could not list Claude plugins"));
-  }
-
-  for (const plugin of requiredPlugins) {
-    if (plugin.marketplaceUrl && !installedIds.has(plugin.id)) {
-      try {
-        await run("claude", ["plugin", "marketplace", "add", plugin.marketplaceUrl]);
-        consola.log(colors.dim(`  Added marketplace: ${plugin.marketplace}`));
-      } catch {
-        // marketplace may already be added
-      }
-    }
   }
 
   for (const plugin of requiredPlugins) {
