@@ -2,15 +2,15 @@
   "name": "@towles/tool",
   "version": "0.0.158",
   "description": "One off quality of life scripts that I use on a daily basis.",
-  "homepage": "https://github.com/ChrisTowles/towles-tool#readme",
+  "homepage": "https://github.com/ChrisTowles/towles-tool-tmux#readme",
   "bugs": {
-    "url": "https://github.com/ChrisTowles/towles-tool/issues"
+    "url": "https://github.com/ChrisTowles/towles-tool-tmux/issues"
   },
   "license": "MIT",
   "author": "Chris Towles <Chris.Towles.Dev@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ChrisTowles/towles-tool.git"
+    "url": "git+https://github.com/ChrisTowles/towles-tool-tmux.git"
   },
   "funding": {
     "url": "https://github.com/sponsors/ChrisTowles"

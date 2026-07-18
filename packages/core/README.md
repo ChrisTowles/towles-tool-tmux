@@ -20,6 +20,6 @@ Core workflow automation commands for Claude Code.
 ## Installation
 
 ```bash
-claude plugin marketplace add ChrisTowles/towles-tool
+claude plugin marketplace add ChrisTowles/towles-tool-tmux
 claude plugin enable tt@towles-tool
 ```

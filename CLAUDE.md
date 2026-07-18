@@ -1,6 +1,8 @@
-# towles-tool
+# towles-tool-tmux
 
 > Archived — superseded by [towles-tool-rs](https://github.com/ChrisTowles/towles-tool-rs). Binary here is `ttt` (not `tt`) to avoid colliding with the Rust CLI. AgentBoard in this repo is kept as a tmux-based reference example; the recommended, actively developed AgentBoard is `crates/tt-agentboard` in towles-tool-rs.
+>
+> This repo was originally named `towles-tool`. It was renamed to `towles-tool-tmux` after `towles-tool-rs` took over the `towles-tool` name/purpose as the actively developed CLI — this repo remains as a tmux-based reference (AgentBoard) and is no longer actively maintained.
 
 ## Worktree slots — you are probably working in one
 

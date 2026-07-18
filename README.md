@@ -1,6 +1,8 @@
-# Towles Tool
+# Towles Tool (tmux)
 
 > **Deprecated:** I've switched to [towles-tool-rs](https://github.com/ChrisTowles/towles-tool-rs) as my daily driver. This repo is no longer actively maintained, and its binary is now `ttt` (not `tt`) so it doesn't collide with the Rust CLI. AgentBoard in particular is kept here only as a tmux-based reference example — see [towles-tool-rs's `tt-agentboard`](https://github.com/ChrisTowles/towles-tool-rs/tree/main/crates/tt-agentboard) for the actively developed, recommended version.
+>
+> This repo was originally named `towles-tool`; it was renamed to `towles-tool-tmux` once `towles-tool-rs` took over the `towles-tool` name as the actively developed CLI.
 
 Personal CLI toolkit with developer utilities.
 
@@ -9,7 +11,7 @@ Personal CLI toolkit with developer utilities.
 ### Claude Code Plugin
 
 ```bash
-claude plugin marketplace add ChrisTowles/towles-tool
+claude plugin marketplace add ChrisTowles/towles-tool-tmux
 claude plugin install tt@towles-tool
 claude plugin update tt@towles-tool
 ```
@@ -23,8 +25,8 @@ bun install -g towles-tool
 ### From Source
 
 ```bash
-git clone https://github.com/ChrisTowles/towles-tool.git
-cd towles-tool
+git clone https://github.com/ChrisTowles/towles-tool-tmux.git
+cd towles-tool-tmux
 bun install
 bun link
 ```

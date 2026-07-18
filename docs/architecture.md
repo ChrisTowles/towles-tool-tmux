@@ -35,7 +35,7 @@
 **Plugin Marketplace**: `.claude-plugin/marketplace.json`
 
 ```bash
-claude plugin marketplace add ChrisTowles/towles-tool
+claude plugin marketplace add ChrisTowles/towles-tool-tmux
 claude plugin install tt@towles-tool
 claude plugin update tt@towles-tool
 ```
@@ -43,7 +43,7 @@ claude plugin update tt@towles-tool
 **Reinstall from local path** (for development):
 
 ```bash
-claude plugin uninstall tt@towles-tool && claude plugin marketplace remove towles-tool && claude plugin marketplace add /home/ctowles/code/p/towles-tool && claude plugin install tt@towles-tool
+claude plugin uninstall tt@towles-tool && claude plugin marketplace remove towles-tool && claude plugin marketplace add /home/ctowles/code/p/towles-tool-tmux && claude plugin install tt@towles-tool
 ```
 
 **Available Plugins**:

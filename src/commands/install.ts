@@ -70,7 +70,7 @@ async function ensureClaudePlugins(): Promise<void> {
     {
       id: "tt@towles-tool",
       name: "core",
-      marketplaceUrl: "https://github.com/ChrisTowles/towles-tool",
+      marketplaceUrl: "https://github.com/ChrisTowles/towles-tool-tmux",
       marketplace: "towles-tool",
     },
     {
