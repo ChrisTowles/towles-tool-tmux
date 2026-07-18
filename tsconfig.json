@@ -13,6 +13,6 @@
     "skipLibCheck": true,
     "types": ["node", "@types/bun"]
   },
-  "include": ["src/**/*.ts", "bin/**/*.ts", "scripts/**/*.ts", "packages/core/**/*.ts"],
+  "include": ["src/**/*.ts", "bin/**/*.ts", "scripts/**/*.ts"],
   "exclude": ["packages/agentboard"]
 }

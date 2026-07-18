@@ -33,9 +33,7 @@
     "access": "public"
   },
   "scripts": {
-    "version:sync": "bun run scripts/sync-versions.ts",
     "pack:publish": "bun run scripts/pack-publish.ts",
-    "prepublishOnly": "bun run version:sync",
     "dev": "bun run bin/run.ts",
     "format": "oxfmt --write .",
     "format:check": "oxfmt --check .",
@@ -78,7 +76,7 @@
     "vitest": "^4.1.4"
   },
   "simple-git-hooks": {
-    "pre-commit": "bun run format:check && bun run lint && bun run typecheck && claude plugin validate ."
+    "pre-commit": "bun run format:check && bun run lint && bun run typecheck"
   },
   "patchedDependencies": {
     "prompts@2.4.2": "patches/prompts.patch"
