@@ -13,7 +13,7 @@ import type { AgentWatcher, AgentWatcherContext } from "../contracts/agent-watch
 import { AgentTracker, instanceKey } from "../agents/tracker";
 import { SessionOrder } from "./session-order";
 import { SessionMetadataStore } from "./metadata-store";
-import { loadConfig, saveConfig, loadPreferredEditor } from "../config";
+import { loadConfig, saveConfig, loadPreferredEditor, configDir } from "../config";
 import { resolveSidebarWidthFromResizeContext, snapshotSidebarWindows } from "./sidebar-width-sync";
 import type { SidebarResizeContext, SidebarResizeSuppression } from "./sidebar-width-sync";
 import { shell, getGitInfo, syncGitWatchers, teardownGitWatchers, startGitPoll } from "./git-info";
@@ -96,8 +96,7 @@ export function startServer(
   const allWatchers = watchers ?? [];
   const tracker = new AgentTracker();
   const metadataStore = new SessionMetadataStore();
-  const home = process.env.HOME ?? process.env.USERPROFILE ?? "";
-  const sessionOrderPath = join(home, ".config", "towles-tool", "agentboard", "session-order.json");
+  const sessionOrderPath = join(configDir(), "agentboard", "session-order.json");
   const sessionOrder = new SessionOrder(sessionOrderPath);
 
   // Clear previous log on server start

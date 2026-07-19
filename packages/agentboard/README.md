@@ -120,7 +120,7 @@ Solid.js app rendered via OpenTUI. Connects to server over WebSocket.
 
 ## Configuration
 
-Config file: `~/.config/towles-tool/agentboard/config.json`
+Config file: `~/.config/towles-tool-tmux/agentboard/config.json`
 
 ```json
 {

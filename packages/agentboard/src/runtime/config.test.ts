@@ -4,8 +4,8 @@ import { join } from "node:path";
 import { loadConfig, saveConfig, loadPreferredEditor } from "./config";
 
 const TEST_HOME = join(import.meta.dir, ".test-home");
-const CONFIG_DIR = join(TEST_HOME, ".config", "towles-tool");
-const SETTINGS_FILE = join(CONFIG_DIR, "towles-tool.settings.json");
+const CONFIG_DIR = join(TEST_HOME, ".config", "towles-tool-tmux");
+const SETTINGS_FILE = join(CONFIG_DIR, "towles-tool-tmux.settings.json");
 
 describe("config", () => {
   beforeEach(() => {
