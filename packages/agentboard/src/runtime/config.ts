@@ -20,9 +20,16 @@ export interface AgentboardConfig {
 
 const DEFAULTS: AgentboardConfig = {};
 
-function settingsPath(homeDir?: string): string {
+const TOOL_NAME = "towles-tool-tmux";
+
+/** Config directory shared by the towles-tool-tmux CLI and agentboard (~/.config/towles-tool-tmux) */
+export function configDir(homeDir?: string): string {
   const home = homeDir ?? process.env.HOME ?? process.env.USERPROFILE ?? "";
-  return join(home, ".config", "towles-tool", "towles-tool.settings.json");
+  return join(home, ".config", TOOL_NAME);
+}
+
+export function settingsPath(homeDir?: string): string {
+  return join(configDir(homeDir), `${TOOL_NAME}.settings.json`);
 }
 
 function readSettingsFile(homeDir?: string): Record<string, unknown> {
@@ -34,7 +41,7 @@ function readSettingsFile(homeDir?: string): Record<string, unknown> {
 }
 
 /**
- * Load agentboard config from ~/.config/towles-tool/towles-tool.settings.json
+ * Load agentboard config from ~/.config/towles-tool-tmux/towles-tool-tmux.settings.json
  * under the "agentboard" key.
  * @param homeDir — override home directory (for testing)
  */

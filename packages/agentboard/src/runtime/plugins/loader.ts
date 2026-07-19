@@ -4,6 +4,7 @@ import type { MuxProvider } from "../contracts/mux";
 import type { AgentWatcher } from "../contracts/agent-watcher";
 import { MuxRegistry } from "../mux/registry";
 import { SERVER_PORT, SERVER_HOST } from "../shared";
+import { settingsPath } from "../config";
 
 /**
  * The API surface passed to every plugin factory function.
@@ -53,7 +54,7 @@ export class PluginLoader {
   }
 
   /**
-   * Load plugins from a directory (like ~/.config/towles-tool/agentboard/plugins/).
+   * Load plugins from a directory (like ~/.config/towles-tool-tmux/agentboard/plugins/).
    * Scans one level deep:
    *   - *.ts / *.js files → loaded directly
    *   - subdirs with index.ts / index.js → loaded as entry point
@@ -110,10 +111,9 @@ export class PluginLoader {
   }
 
   getSetupInfo(): { registeredMuxProviders: string[]; configPath: string; serverPort: number } {
-    const home = process.env.HOME ?? process.env.USERPROFILE ?? "";
     return {
       registeredMuxProviders: this.registry.list(),
-      configPath: join(home, ".config", "towles-tool", "towles-tool.settings.json"),
+      configPath: settingsPath(),
       serverPort: SERVER_PORT,
     };
   }

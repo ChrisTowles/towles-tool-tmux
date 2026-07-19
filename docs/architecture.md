@@ -4,7 +4,7 @@
 
 **Entry point**: `bin/run.ts` - oclif command router
 
-- Loads settings from `~/.config/towles-tool/towles-tool.settings.json`
+- Loads settings from `~/.config/towles-tool-tmux/towles-tool-tmux.settings.json`
 - Routes to oclif commands in `src/commands/`
 
 **Configuration System**:

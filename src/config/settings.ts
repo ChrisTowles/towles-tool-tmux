@@ -5,7 +5,7 @@ import { homedir } from "node:os";
 import consola from "consola";
 import { colors } from "consola/utils";
 
-const TOOL_NAME = "towles-tool";
+const TOOL_NAME = "towles-tool-tmux";
 
 /** Default config directory */
 export const DEFAULT_CONFIG_DIR = path.join(homedir(), ".config", TOOL_NAME);
