@@ -16,7 +16,7 @@
     "url": "https://github.com/sponsors/ChrisTowles"
   },
   "bin": {
-    "towles-tool": "./bin/run.ts",
+    "towles-tool-tmux": "./bin/run.ts",
     "ttt": "./bin/run.ts"
   },
   "workspaces": [
